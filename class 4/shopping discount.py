@@ -1,19 +1,21 @@
-# ### **Activity 1— Online Shopping Discount System**
-
-# Input:
-
-# - price
-# - membership (yes/no)
-
-# If price > 1000 → 10% discount
-
-# If member → additional 5%
-
-# Else → no discount
 price = int(input("What is the price: "))
-membership = input("Do you have the mebership: ")
-if membership == "yes":
-    price = price - (price*0.05)
+membershipDiscount = 0
+discountOnMoreThan1000 = 0
+membership = input("Do you have the mebership: ").lower()
+
 if price > 1000:
-    price = price - (price*0.1)
-print(f"The price is: {price}")
+    discountOnMoreThan1000 = (price*0.1)
+if membership == "yes":
+    membershipDiscount = (price*0.05)
+else:
+    print("Note: You did not avail any membership discount, Subscribe!!")
+print(f"""
+-------------------------------Bill Amount-------------------------------
+      
+      Product price:                              {price}     
+      Membership Discount(5%):                    {membershipDiscount}
+      Discount on More Than 1000(10%):            {discountOnMoreThan1000}
+      Final Price:                                {price}  
+                                   
+-------------------------------------------------------------------------
+ """)
