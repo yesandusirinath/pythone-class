@@ -8,7 +8,7 @@ while True:
            "pound": "£",         #have all of the currency so that if you says singular and plural it still works
            "euros": "€",
            "euro": "€"}
-    if currency in symbols:              #tells what currency you are using in this programe
+    if currency in symbols.keys():              #tells what currency you are using in this programe
         symbol = symbols[currency]
         print(f"Currency is accepted:{symbol}")  #tell you what currncey is use in this bill
         print(f"You currency is {currency}")

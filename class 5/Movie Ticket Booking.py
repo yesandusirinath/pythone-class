@@ -11,17 +11,18 @@ if student == "yes":
     percentage = price*0.2                 # how much dicount you get
     price = price - percentage            #this should be 40 if the age is above 12
                                           # if the is below 12 the pirce should be 20
-discout = base_ticket_price - price
-discount_percentage = discout / base_ticket_price *100
+discout = base_ticket_price - price                                #check how much the discount is
+discount_percentage = discout / base_ticket_price *100            #calculate the percentage of the discount
 print(f""" 
 ==================================Bill==================================
-      Age                                        {age}
+    
+      Age                                        {age}years old
       Is the person a student                    {student}
-      The price of the ticket                    {base_ticket_price}
+      The price of the ticket                    £{base_ticket_price}
       The discount                               {discount_percentage}%
-      Price of the discout                       {discout}
+      Price of the discout                       £{discout}
       
-      The total                                  {price}
+      The total                                  £{price}
 
 ========================================================================
-""")
+""")              #the bill what is will show for the custormer
