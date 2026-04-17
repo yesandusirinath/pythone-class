@@ -14,5 +14,4 @@ print(f"""
     The number is = {f}
     The odd numbers = {odd}
     The even numbers = {even}
-
 """)

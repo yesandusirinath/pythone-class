@@ -32,6 +32,7 @@ print(ages)
 ages.pop()
 print(ages)
 ages.pop(2)
+ages.pop(ages)
 print(ages)
 #also can use ages.remove("xyz") for this one you need to give the exact thing that need to remove or ages .remove(11) for this you need to the index 
 
