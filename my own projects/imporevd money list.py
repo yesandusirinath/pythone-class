@@ -3,6 +3,17 @@ print ("Expenses traker")
 QUwarning = True
 expensesList = []
 
+import json
+import os 
+folder = "expeses data"
+filename =  os.path.join(folder, "expensesList")
+os.makedirs(folder, exist_ok=True)
+if os.path.exists(filename):
+    with open(filename, "r") as f:
+        expensesList = json.load(f)
+else:
+    expensesList = []
+
 def addexpenses():
     while True:
         print ("Go back to the menu type back to the menu. ")
@@ -16,9 +27,6 @@ def addexpenses():
                 if amount.strip().lower() == "back":
                     break
                 elif amount.strip().lower() == "back to the menu":
-                    break
-                elif any(item["catergory"] == catergory and item["amount"] == amount for item in expensesList):
-                    print ("This is already in the list.")
                     break
                 elif amount.isdigit():
                     while True:
@@ -36,8 +44,13 @@ def addexpenses():
                                 print ("The warning question is already there.")
                                 continue
                         elif asknote.strip().lower() == "yes":
+                            sameItemExpense = False
                             note = input("What is the note that you want to add: ")
-                            if note.strip().lower() == "back":
+                            if any(item ["catergory"] == catergory and item ["amount"] == amount and item ["notes"] == note for item in expensesList):
+                                sameItemExpense = True
+                                print ("This item already exist in the expeses list")
+                                break
+                            elif note.strip().lower() == "back":
                                 continue
                             elif note.strip().lower() == "back to the menu":
                                 break
@@ -102,6 +115,8 @@ def addexpenses():
                         return
                     elif note:
                         break
+                    elif sameItemExpense == True:
+                        break
                 else:
                     print ("You can only enter numbers.")
                     continue
@@ -146,10 +161,14 @@ def changelist ():
                                 elif choice.strip().lower() == "back to the menu":
                                     return
                                 elif choice.isdigit():
-                                    newCategory = input("What is the new category?: ")
-                                    matches[int(choice) - 1]["catergory"] = newCategory
-                                    print ("Succefully chenged")        
-                                    break
+                                    if 1 <= choice <= len(matches):
+                                        newCategory = input("What is the new category?: ")
+                                        matches[int(choice) - 1]["catergory"] = newCategory
+                                        print ("Succefully chenged")        
+                                        break
+                                    else:
+                                        print(f"Choice {choice} is not an available choice.")
+                                        continue                                
                                 else:
                                     print ("you can only enter a number")
                                     continue
@@ -188,12 +207,16 @@ def changelist ():
                                 elif choice.strip().lower() == "back to the menu":
                                     return
                                 elif choice.isdigit():
-                                    newamount = input("What is the new amount?: ")
-                                    matches[int(choice) - 1]["amount"] = newamount
-                                    print ("Succefully chenged")        
-                                    break
+                                    if 1 <= choice <= len(matches):
+                                        newamount = input("What is the new amount?: ")
+                                        matches[int(choice) - 1]["amount"] = newamount
+                                        print ("Succefully chenged")        
+                                        break
+                                    else:
+                                        print(f"Choice {choice} is not an available choice.")
+                                        continue  
                                 else:
-                                    print ("you can only enter a number")
+                                    print ("You can only enter a number")
                                     continue
                     if whatamount.strip().lower() == "back":
                         break
@@ -230,10 +253,14 @@ def changelist ():
                                 elif choice.strip().lower() == "back to the menu":
                                     return
                                 elif choice.isdigit():
-                                    newnote = input("What is the new note?: ")
-                                    matches[int(choice) - 1]["note"] = newnote
-                                    print ("Succefully chenged")    
-                                    break
+                                    if 1 <= choice <= len(matches):
+                                        newnote = input("What is the new note?: ")
+                                        matches[int(choice) - 1]["note"] = newnote
+                                        print ("Succefully chenged")    
+                                        break
+                                    else:
+                                        print(f"Choice {choice} is not an available choice.")
+                                        continue  
                                 else:
                                     print ("you can only enter a number")
                                     continue
@@ -246,11 +273,22 @@ def changelist ():
                     else:
                         print (f"{whatamount} is not in the list.")
                         continue
+            else:
+                print ("This is not a type of category in the list.")
+                print ("The only type of categorys are -")
+                print ()
+                print ("category (the name of the expenses)")
+                print ()
+                print ("amount (how much you spend on the expenses)")
+                print ()
+                print ("notes (the note that you added to the list)")        
     else:                
         print ("There is nothing on the list.")
         return
 def showlist ():
     if expensesList:
+        print ("Expenses list")
+        print ()
         for item in expensesList:
             print("Catergory:", item["catergory"])
             print("Amount:", item["amount"])
@@ -259,7 +297,116 @@ def showlist ():
     else:
         print("There is nothing on the list.")
         return        
-
+def removeitem():
+    if expensesList:
+        while True:
+            print ("back to the last question type back")
+            print ("back to the menu type back to the menu.")
+            print () 
+            whatCategory1 = input("What is the name of the category that you want to remove: ")
+            if any(item["catergory"].strip().lower() == whatCategory1 for item in expensesList):
+                print (f"These are the expenses under the category {whatCategory1}.")
+                for item in expensesList:
+                    if item["catergory"] == whatCategory1:
+                        print("Catergory:", item["catergory"])
+                        print("Amount:", item["amount"])
+                        print("Notes:", item["notes"])
+                        print()
+                while True:
+                    if removeuser.strip().lower() == "no":
+                        break
+                    whatAmount1 = input(f"What was the amount that you spended on {whatCategory1}: ")
+                    if any(item["amount"].strip().lower() == whatAmount1 for item in expensesList):
+                        count = 0
+                        print (f"These are the items on the expenses list under the category {whatCategory1} and with the amount {whatAmount1}.")
+                        for item in expensesList:
+                            if item["catergory"] == whatCategory1 and item["amount"] == whatAmount1:
+                                print("Catergory:", item["catergory"])
+                                print("Amount:", item["amount"])
+                                print("Notes:", item["notes"])
+                                notes = item["notes"]
+                                print()
+                                count += 1
+                        if count == 1:
+                            while True:
+                                removeuser = input(f"Do you want to remove category - {whatCategory1} amount - {whatAmount1} notes - {notes}: ")
+                                if removeuser.strip().lower() == "yes":
+                                    for item in expensesList:
+                                        if item["caterogy"] == whatCategory1 and item["amount"] == whatAmount1:
+                                            expensesList.remove(item)
+                                            print("Succesfully removed")
+                                elif removeuser.strip().lower() == "no":
+                                    break
+                                elif removeuser.strip().lower() == "back":
+                                    break
+                                elif removeuser.strip().lower() == "back to the menu":
+                                    return
+                                else:
+                                    print("Unvailed answer the only answer are yes and no.")
+                                    continue
+                        elif 1 < count:
+                            print ("If there was no note type - ")
+                            whatnote1 = input("What was the note that was on the expense: ")
+                            if whatnote1.strip().lower() == "back":
+                                continue
+                            elif whatnote1.strip().lower() == "back to the menu":
+                                return
+                            else:
+                                for item in expensesList:
+                                    if item ["catergory"] == whatCategory1 and item["amount"] == whatAmount1 and item["notes"] == whatnote1:
+                                        expensesList.remove(item)
+                                        print("Succefully removed")
+                    elif whatAmount1.strip().lower() == "back":
+                        break
+                    elif whatAmount1.strip().lower() == "back to the menu":
+                        return
+                    else:
+                        print(f"{whatCategory1} with the amount {whatAmount1} is not in the list.")
+                        continue
+            elif whatCategory1.strip().lower() == "back" or whatCategory1.strip().lower() == "back to the menu":
+                return
+            else:
+                print (f"{whatCategory1} is not in the list.")
+                continue
+    else:
+        print ("There is nothing on the list.")
+        return
+def onecatergory():
+    if expensesList:
+        while True:
+            whichcategory = input("What catergory do you want to see: ")
+            if whichcategory.strip().lower() == "back" or whichcategory.strip().lower():
+                return
+            elif whichcategory.strip().lower() == "category":
+                print ("All the names of the expenses are")
+                for item in expensesList:
+                    print(item["catergory"])
+                    print()
+                break
+            elif whichcategory.strip().lower() == "amount":
+                print ("All of the amounts are")
+                for item in expensesList:
+                    print(item["amount"])
+                    print()
+                break
+            elif whichcategory.strip().lower() == "notes":
+                print("These are all the notes")
+                for item in expensesList:
+                    print(item["notes"])
+                    print()
+                break  
+            else:
+                print("This is not a option avilable.")
+                print ("The only option avilable are category or amount or notes")
+                continue  
+    else:
+        print("There is nothing ont the expenses list.")
+        return
+def sumamount():
+    amountsum = 0
+    for item in expensesList:
+        amountsum += int(item["amount"])
+    print (f"The sum of all the expenses is {amountsum}.")
 
 while True:
     print ("""
@@ -270,9 +417,8 @@ while True:
             3. Remove any expenses.
             4. Sum of all the expenses.
             5. See just one catergory
-            6. All of the expense with the amount and notes.
-            7. See it as a bill. 
-            8. Exit 
+            6. All of the expense with the amount and notes. 
+            7. Exit 
 
     ------------------------------------------------------
     """)
@@ -282,16 +428,18 @@ while True:
     elif choice.strip() == "2":
         changelist()
     elif choice.strip() == "3":
-        pass
+        removeitem()
     elif choice.strip() == "4":
-        pass
+        sumamount()
     elif choice.strip() == "5":
-        pass
+        onecatergory()
     elif choice.strip() == "6":
         showlist()
     elif choice.strip() == "7":
-        pass
-    elif choice.strip() == "8":
+        print ("Thank you for your time")
+        with open(filename, "w") as f:
+            json.dump(expensesList, f)
+        print("Updated list saved!")
         break
     else:
         print ("The only option are the number on the left side of the choices.")
