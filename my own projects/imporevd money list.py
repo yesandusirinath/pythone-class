@@ -305,6 +305,10 @@ def removeitem():
             print () 
             whatCategory1 = input("What is the name of the category that you want to remove: ")
             if any(item["catergory"].strip().lower() == whatCategory1 for item in expensesList):
+                count = 0
+                amount = 0
+                notes1 = 0
+                catergory = 0
                 print (f"These are the expenses under the category {whatCategory1}.")
                 for item in expensesList:
                     if item["catergory"] == whatCategory1:
@@ -312,50 +316,92 @@ def removeitem():
                         print("Amount:", item["amount"])
                         print("Notes:", item["notes"])
                         print()
+                        amount = item["amount"]
+                        notes1 = item["notes"]
+                        catergory = item["catergory"]
+                        count += 1
                 while True:
-                    if removeuser.strip().lower() == "no":
-                        break
-                    whatAmount1 = input(f"What was the amount that you spended on {whatCategory1}: ")
-                    if any(item["amount"].strip().lower() == whatAmount1 for item in expensesList):
-                        count = 0
-                        print (f"These are the items on the expenses list under the category {whatCategory1} and with the amount {whatAmount1}.")
-                        for item in expensesList:
-                            if item["catergory"] == whatCategory1 and item["amount"] == whatAmount1:
-                                print("Catergory:", item["catergory"])
-                                print("Amount:", item["amount"])
-                                print("Notes:", item["notes"])
-                                notes = item["notes"]
-                                print()
-                                count += 1
-                        if count == 1:
+                    if count == 1:
                             while True:
-                                removeuser = input(f"Do you want to remove category - {whatCategory1} amount - {whatAmount1} notes - {notes}: ")
+                                removeuser = input(f"Do you want to remove category - {catergory} amount - {amount} notes - {notes1}: ")
                                 if removeuser.strip().lower() == "yes":
                                     for item in expensesList:
-                                        if item["caterogy"] == whatCategory1 and item["amount"] == whatAmount1:
+                                        if item["catergory"] == whatCategory1 and item["amount"] == amount:
                                             expensesList.remove(item)
                                             print("Succesfully removed")
+                                            return
                                 elif removeuser.strip().lower() == "no":
-                                    break
+                                    return
                                 elif removeuser.strip().lower() == "back":
                                     break
                                 elif removeuser.strip().lower() == "back to the menu":
                                     return
                                 else:
                                     print("Unvailed answer the only answer are yes and no.")
+                                    continue                       
+                    elif count == 2:
+                        whatAmount1 = input(f"What was the amount that you spended on {whatCategory1}: ")
+                        counter2 = 0
+                        if any(item["amount"].strip().lower() == whatAmount1 for item in expensesList):
+                            print (f"These are the items on the expenses list under the category {whatCategory1} and with the amount {whatAmount1}.")
+                            for item in expensesList:
+                                if item["catergory"] == whatCategory1 and item["amount"] == whatAmount1:
+                                    print("Catergory:", item["catergory"])
+                                    print("Amount:", item["amount"])
+                                    print("Notes:", item["notes"])
+                                    notes = item["notes"]
+                                    print()
+                                    counter2 += 1
+                        elif counter2 == 1:
+                            while True:
+                                removeuser2 = input(f"Do you want to remove category - {whatCategory1} amount - {whatAmount1} notes - {notes}: ")
+                                if removeuser2.strip().lower() == "yes":
+                                    for item in expensesList:
+                                        if item["catergory"] == whatCategory1 and item["amount"] == whatAmount1:
+                                            expensesList.remove(item)
+                                            print("Succesfully removed")
+                                            return
+                                elif removeuser2.strip().lower() == "no":
+                                    return
+                                elif removeuser2.strip().lower() == "back":
+                                    break
+                                elif removeuser2.strip().lower() == "back to the menu":
+                                    return
+                                else:
+                                    print("Unvailed answer the only answer are yes and no.")
                                     continue
-                        elif 1 < count:
-                            print ("If there was no note type - ")
-                            whatnote1 = input("What was the note that was on the expense: ")
-                            if whatnote1.strip().lower() == "back":
-                                continue
-                            elif whatnote1.strip().lower() == "back to the menu":
-                                return
-                            else:
-                                for item in expensesList:
-                                    if item ["catergory"] == whatCategory1 and item["amount"] == whatAmount1 and item["notes"] == whatnote1:
-                                        expensesList.remove(item)
-                                        print("Succefully removed")
+                        elif counter2 > 1:
+                            while True:
+                                print ("If there was no note typed use "-" ")
+                                whatnote1 = input("What was the note that was on the expense: ")
+                                if whatnote1.strip().lower() == "back":
+                                    continue
+                                elif whatnote1.strip().lower() == "back to the menu":
+                                    return
+                                else:
+                                    while True:
+                                        for item in expensesList:
+                                            if item ["catergory"] == whatCategory1 and item["amount"] == whatAmount1 and item["notes"] == whatnote1:
+                                                option = input(f"Do you want to remove category - {whatCategory1} amount - {whatAmount1} notes - {notes}: ")
+                                                if option.strip().lower() == "yes":
+                                                    expensesList.remove(item)
+                                                    print("Succefully removed")
+                                                elif option.strip().lower() == "no":
+                                                    return
+                                                elif option.strip().lower() == "back":
+                                                    break
+                                                elif option.strip().lower() == "back to the menu":
+                                                    return
+                                                else:
+                                                    print("unvaild option the option are only yes or no.")
+                                                    continue
+                                            else:
+                                                print(f"there was no expense that had the note {whatnote1}.")
+                                                break    
+                        elif whatAmount1.strip().lower() == "back":
+                            break
+                        elif whatAmount1.strip().lower() == "back to the menu":
+                            return    
                     elif whatAmount1.strip().lower() == "back":
                         break
                     elif whatAmount1.strip().lower() == "back to the menu":
@@ -417,8 +463,9 @@ while True:
             3. Remove any expenses.
             4. Sum of all the expenses.
             5. See just one catergory
-            6. All of the expense with the amount and notes. 
-            7. Exit 
+            6. All of the expense with the amount and notes.
+            7. Save
+            8. Exit 
 
     ------------------------------------------------------
     """)
@@ -436,6 +483,11 @@ while True:
     elif choice.strip() == "6":
         showlist()
     elif choice.strip() == "7":
+        with open(filename, "w") as f:
+            json.dump(expensesList, f)
+        print("Updated list saved!")
+        continue  
+    elif choice.strip() == "8":
         print ("Thank you for your time")
         with open(filename, "w") as f:
             json.dump(expensesList, f)
